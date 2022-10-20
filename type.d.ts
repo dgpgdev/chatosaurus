@@ -1,4 +1,4 @@
-import Room from './src/rooms/Room.ts'
+import { Room } from './src/rooms/Room.ts'
 
 /**
  * Objet de configuration du server

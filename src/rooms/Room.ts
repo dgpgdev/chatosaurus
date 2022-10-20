@@ -42,9 +42,9 @@ export class Room {
    * @param {string} evt - event label
    * @param {Array} args - arguments array
    */
-  invoke(evt: string, ...args: any[]) {
+  invoke(evt: string, ...args: unknown[]) {
     this.#clientList.forEach((socket) => {
-      socket.sendJSON([evt].concat(args))
+      socket.sendJSON([evt, ...args])
     })
   }
 

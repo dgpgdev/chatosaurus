@@ -64,7 +64,7 @@ export class RoomManager {
    * @param {Websocket} socket - the websocket object
    */
   leave(roomId: string, socket: WebSocketUser) {
-    let r = this.getRoom(roomId)
+    const r = this.getRoom(roomId)
     if (r) {
       r.leave(socket)
       if (r.clients.length === 0 && !r.keepAlive) {
