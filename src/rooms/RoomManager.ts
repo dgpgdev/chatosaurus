@@ -1,11 +1,11 @@
-import { WebSocketUser } from '../WebSocketUser.ts'
-import Room from './Room.ts'
+import { WebSocketUser } from '../../type.d.ts'
+import { Room } from './Room.ts'
 
 /**
  * Class to manage rooms list
  * @author Gauthier de Girodon Pralong
  */
-export default class RoomManager {
+export class RoomManager {
   #roomList: Room[]
   /**
    * Constructor

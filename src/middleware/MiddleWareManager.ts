@@ -1,4 +1,4 @@
-import { Context, Middleware } from './MiddelWare.ts'
+import { Context, Middleware } from '../../type.d.ts'
 
 export default class MiddleWareManager {
   middlewareList: Middleware<unknown>[]

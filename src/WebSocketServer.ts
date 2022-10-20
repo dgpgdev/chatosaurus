@@ -1,24 +1,9 @@
 import { Server } from 'https://deno.land/std@0.137.0/http/server.ts'
-import { WebSocketUser } from './WebSocketUser.ts'
 import { EventEmitter } from 'https://deno.land/std@0.148.0/node/events.ts?s=EventEmitter'
+import { RoomManager } from './rooms/RoomManager.ts'
+import { WebsocketServerConfig, Middleware, WebSocketUser } from '../type.d.ts'
 import MiddleWareManager from './middleware/MiddleWareManager.ts'
-import RoomManager from './rooms/RoomManager.ts'
-import { Middleware } from './middleware/MiddelWare.ts'
-/**
- * Objet de configuration du server
- */
-export type WebsocketServerConfig = {
-  /** hostname */
-  hostname: string
-  /** port server */
-  port: number
-  /** use tls or not */
-  secure?: boolean
-  /** The path to the file containing the TLS private key. */
-  keyFile?: string
-  /** The path to the file containing the TLS certificate */
-  certFile?: string
-}
+
 /**
  * Class permettant la création d'un server websocket
  */

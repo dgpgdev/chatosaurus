@@ -1,10 +1,10 @@
-import { WebSocketUser } from '../WebSocketUser.ts'
+import { WebSocketUser } from '../../type.d.ts'
 
 /**
  * Class to represent room
  * @author Gauthier de Girodon Pralong
  */
-export default class Room {
+export class Room {
   id: string
   keepAlive: boolean
   #clientList: WebSocketUser[]
