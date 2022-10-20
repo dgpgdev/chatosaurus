@@ -24,6 +24,7 @@ export class Room {
    * @param {WebSocketUser} socket - the WebSocketUser object
    */
   join(socket: WebSocketUser) {
+    if (this.#clientList.find((client) => client.id === socket.id)) return
     this.#clientList.push(socket)
   }
 
