@@ -125,11 +125,15 @@ export class WebSocketServer extends EventEmitter {
       )
     }
 
+    // send json message
     client.sendJSON = (data: unknown) => {
       client.send(JSON.stringify(data))
     }
-
+    // addUser to connected socket list
     this.#clientList.push(client)
+
+    // dispatch event
+    this.emit('onConnect', client)
   }
 
   async message(client: WebSocketUser, data: string) {
