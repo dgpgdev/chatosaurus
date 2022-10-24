@@ -3,8 +3,7 @@ import {
   assertExists,
   assertInstanceOf,
 } from 'https://deno.land/std@0.158.0/testing/asserts.ts'
-import Room from '../ws/rooms/Room.ts'
-import RoomManager from '../ws/rooms/RoomManager.ts'
+import { Room, RoomManager } from '../mod.ts'
 
 Deno.test(`Room Manager no room at start`, () => {
   const rm = new RoomManager()
