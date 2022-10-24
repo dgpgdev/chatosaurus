@@ -25,6 +25,7 @@ export class Room {
    */
   join(socket: WebSocketUser) {
     if (this.#clientList.find((client) => client.id === socket.id)) return
+    this.invoke('join', { roomId: this.id, userId: socket.id })
     this.#clientList.push(socket)
   }
 
@@ -36,6 +37,7 @@ export class Room {
     this.#clientList = this.#clientList.filter((u) => {
       return u.id != socket.id
     })
+    this.invoke('leave', { roomId: this.id, userId: socket.id })
   }
 
   /**
