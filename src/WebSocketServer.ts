@@ -97,24 +97,32 @@ export class WebSocketServer extends EventEmitter {
       this.#roomManager.leave(roomId, client)
     }
 
-    //leave client from all rooms
+    /**
+     * user leave all rooms
+     */
     client.leaveAll = () => {
       client.rooms.forEach((roomId: string) => {
         client.leave(roomId)
       })
     }
 
-    //get room object
+    /**
+     * Récupère les information de la room
+     */
     client.room = (roomId: string) => {
       return this.#roomManager.getRoom(roomId)
     }
 
-    //invoke method on client client
+    /**
+     * invoke method on client client
+     * */
     client.invoke = (evt: string, ...args: unknown[]) => {
       client.send(JSON.stringify([evt, ...args]))
     }
 
-    //get client by uuid
+    /**
+     * Get Client
+     * */
     client.to = (clientId: string) => {
       return this.#clientList.find((client) => client.id === clientId)
     }
@@ -140,7 +148,6 @@ export class WebSocketServer extends EventEmitter {
   async message(client: WebSocketUser, data: string) {
     const parsedData = JSON.parse(data)
     const [evt, ...args] = parsedData
-    console.log(evt)
     await this.#middlewareManager.executeMiddleware({
       evt,
       ws: client,
