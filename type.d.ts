@@ -39,28 +39,33 @@ export type Next = () => void | Promise<void>
  * WebSocket User interface
  */
 export interface WebSocketUser extends WebSocket {
-  // uuid v4
+  /** uuid v4 */
   id: string
-  // room list
+
+  /** room list */
   rooms: string[]
-  //add client to room
+
+  /** add client to room */
   join(roomId: string): void
-  //remove client from room
+
+  /** remove client from room */
   leave(roomId: string): void
 
-  //leave client from all rooms
+  /** leave client from all rooms */
   leaveAll(): void
 
-  //get room object
+  /** get room object */
   room(roomId: string): Room | undefined
 
-  //invoke method on client client
+  /** invoke method on client client */
   invoke(evt: string, ...args: unknown[]): void
-  //get client by uuid
+
+  /** get client object by uuid */
   to(clientId: string): void
 
-  //invoke method to all connected client
+  /** invoke method to all connected client */
   broadcast(evt: string, ...args: unknown[]): void
 
+  /** Send JSON data to client */
   sendJSON(data: unknown): void
 }
