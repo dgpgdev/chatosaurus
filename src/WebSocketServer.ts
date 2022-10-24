@@ -64,7 +64,6 @@ export class WebSocketServer extends EventEmitter {
     const upgraded = Deno.upgradeWebSocket(req)
 
     const client: WebSocketUser = upgraded.socket as WebSocketUser
-    client.id = crypto.randomUUID()
 
     client.onopen = (_evt) => this.connected(client)
 
@@ -86,6 +85,8 @@ export class WebSocketServer extends EventEmitter {
 
   connected(client: WebSocketUser) {
     //define rooms property for socket
+    client.id = crypto.randomUUID()
+
     client.rooms = []
     client.join = (roomId: string) => {
       this.#roomManager.join(roomId, client)
@@ -161,7 +162,7 @@ export class WebSocketServer extends EventEmitter {
    * @param client
    */
   private disconnected(client: WebSocketUser) {
-    const userIndex = this.#clientList.findIndex((c) => client.id !== c.id)
+    const userIndex = this.#clientList.findIndex((c) => client.id === c.id)
     if (userIndex === -1) {
       this.logError(`user not found`)
     }
@@ -175,7 +176,6 @@ export class WebSocketServer extends EventEmitter {
    */
   private logError(msg: string) {
     console.log(msg)
-    Deno.exit(1)
   }
 
   /**
