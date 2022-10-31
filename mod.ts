@@ -1,10 +1,5 @@
-export { WebSocketServer } from './src/WebSocketServer.ts'
-export { Room } from './src/rooms/Room.ts'
-export { RoomManager } from './src/rooms/RoomManager.ts'
-export type {
-  Context,
-  Middleware,
-  Next,
-  WebsocketServerConfig,
-  WebSocketUser,
-} from './type.d.ts'
+export * from './src/WebSocketServer.ts'
+export * from './src/WebSocketClient.ts'
+export * from './src/rooms/Room.ts'
+export * from './src/rooms/RoomManager.ts'
+export * from './type.d.ts'

@@ -4,10 +4,21 @@ import { RoomManager } from './rooms/RoomManager.ts'
 import { WebsocketServerConfig, Middleware, WebSocketUser } from '../type.d.ts'
 import MiddleWareManager from './middleware/MiddleWareManager.ts'
 
+interface WebSocketEmitter {
+  event(
+    eventName: string | symbol,
+    listener: (context: WebSocketUser) => void
+  ): WebSocketServer
+  event(
+    eventName: string | symbol,
+    listener: (context: WebSocketUser, ...args: any[]) => void
+  ): WebSocketServer
+}
+
 /**
  * Class permettant la création d'un server websocket
  */
-export class WebSocketServer extends EventEmitter {
+export class WebSocketServer extends EventEmitter implements WebSocketEmitter {
   #config: WebsocketServerConfig
   #roomManager: RoomManager
   #middlewareManager
@@ -36,7 +47,7 @@ export class WebSocketServer extends EventEmitter {
   /**
    * Lance le server
    */
-  start(): Promise<void> {
+  start(): Deno.Listener | Deno.TlsListener {
     if (this.#config.secure) {
       if (!this.#config.certFile || !this.#config.keyFile) {
         throw new Error('certfile or keyFile are not defined')
@@ -48,8 +59,8 @@ export class WebSocketServer extends EventEmitter {
         keyFile: this.#config.keyFile,
       })
     }
-
-    return this.#ws.serve(this.#listener)
+    this.#ws.serve(this.#listener)
+    return this.#listener
   }
 
   /**
@@ -145,15 +156,15 @@ export class WebSocketServer extends EventEmitter {
     this.emit('onConnect', client)
   }
 
-  async message(client: WebSocketUser, data: string) {
+  private async message(client: WebSocketUser, data: string) {
     const parsedData = JSON.parse(data)
-    const [evt, ...args] = parsedData
+    const [evt, ...arg] = parsedData
     await this.#middlewareManager.executeMiddleware({
       evt,
       ws: client,
-      data: args,
+      data: arg,
     })
-    this.emit(evt, client, ...args)
+    this.emit(evt, client, ...arg)
   }
 
   /**
@@ -229,5 +240,13 @@ export class WebSocketServer extends EventEmitter {
     if (config) {
       this.#config = config
     }
+  }
+
+  event(
+    eventName: string | symbol,
+    listener: (context: WebSocketUser, ...args: any[]) => void
+  ): WebSocketServer {
+    super.on(eventName, listener)
+    return this
   }
 }

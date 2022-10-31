@@ -15,6 +15,17 @@ export type WebsocketServerConfig = {
   /** The path to the file containing the TLS certificate */
   certFile?: string
 }
+/**
+ * Objet de configuration du server
+ */
+export type WebsocketClientConfig = {
+  /** define if client need to reconnect to the server when close event detected */
+  reconnect: boolean
+  /** if reconnect is true, define number to retry connection */
+  attempt?: number
+  /** if reconnect is true, define number millisecond betwwen retry*/
+  delay?: number
+}
 
 export type Middleware<T> = (context: Context, next: Next) => void | Promise<T>
 
