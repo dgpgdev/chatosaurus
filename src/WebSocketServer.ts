@@ -72,6 +72,8 @@ export class WebSocketServer extends EventEmitter implements WebSocketEmitter {
     if (req.headers.get('upgrade') != 'websocket') {
       return new Response(null, { status: 501 })
     }
+    this.emit('onHeader', req.headers)
+
     const upgraded = Deno.upgradeWebSocket(req)
 
     const client: WebSocketUser = upgraded.socket as WebSocketUser
@@ -242,6 +244,11 @@ export class WebSocketServer extends EventEmitter implements WebSocketEmitter {
     }
   }
 
+  broadCast(event: string, ...args: any[]) {
+    this.#clientList.forEach((c) => {
+      c.invoke.apply(this, [event, ...args])
+    })
+  }
   event(
     eventName: string | symbol,
     listener: (context: WebSocketUser, ...args: any[]) => void
