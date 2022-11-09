@@ -72,14 +72,10 @@ export class WebSocketServer extends EventEmitter implements WebSocketEmitter {
     if (req.headers.get('upgrade') != 'websocket') {
       return new Response(null, { status: 501 })
     }
-    this.emit('onHeader', req.headers)
-
     const upgraded = Deno.upgradeWebSocket(req)
-
     const client: WebSocketUser = upgraded.socket as WebSocketUser
-
-    client.onopen = (_evt) => this.connected(client)
-
+    // cwebsocket basic function
+    client.onopen = (_evt) => this.connected(client, req.headers)
     client.onmessage = (m) => this.message(client, m.data)
     client.onclose = (_evt) => this.disconnected(client)
     client.onerror = (e) => this.handleError(e)
@@ -96,11 +92,18 @@ export class WebSocketServer extends EventEmitter implements WebSocketEmitter {
     return this
   }
 
-  connected(client: WebSocketUser) {
+  /**
+   *
+   * @param client
+   * @param headers
+   */
+  connected(client: WebSocketUser, headers: Headers) {
     //define rooms property for socket
     client.id = crypto.randomUUID()
-
+    // initialize client room list
     client.rooms = []
+
+    // client join a room
     client.join = (roomId: string) => {
       this.#roomManager.join(roomId, client)
     }
@@ -155,9 +158,14 @@ export class WebSocketServer extends EventEmitter implements WebSocketEmitter {
     this.#clientList.push(client)
 
     // dispatch event
-    this.emit('onConnect', client)
+    this.emit('onConnect', client, headers)
   }
 
+  /**
+   *
+   * @param client Websocketuser
+   * @param data
+   */
   private async message(client: WebSocketUser, data: string) {
     const parsedData = JSON.parse(data)
     const [evt, ...arg] = parsedData
