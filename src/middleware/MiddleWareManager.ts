@@ -1,4 +1,4 @@
-import { Context, Middleware } from '../../type.d.ts'
+import { Context, Middleware } from '../type.d.ts'
 
 export default class MiddleWareManager {
   middlewareList: Middleware<unknown>[]
@@ -31,7 +31,7 @@ export default class MiddleWareManager {
   /**
    * executeMiddleware
    */
-  executeMiddleware(context: Context): Promise<unknown> | void {
-    return this.iterateMiddleWare(context, this.middlewareList)
+  async executeMiddleware(context: Context): Promise<any> {
+    return await this.iterateMiddleWare(context, this.middlewareList)
   }
 }

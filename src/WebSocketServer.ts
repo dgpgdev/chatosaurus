@@ -1,7 +1,7 @@
 import { Server } from 'https://deno.land/std@0.137.0/http/server.ts'
 import { EventEmitter } from 'https://deno.land/std@0.148.0/node/events.ts?s=EventEmitter'
 import { RoomManager } from './rooms/RoomManager.ts'
-import { WebsocketServerConfig, Middleware, WebSocketUser } from '../type.d.ts'
+import { WebsocketServerConfig, Middleware, WebSocketUser } from './type.d.ts'
 import MiddleWareManager from './middleware/MiddleWareManager.ts'
 
 interface WebSocketEmitter {
@@ -252,7 +252,7 @@ export class WebSocketServer extends EventEmitter implements WebSocketEmitter {
     }
   }
 
-  broadCast(event: string, ...args: any[]) {
+  broadcast(event: string, ...args: any[]) {
     this.#clientList.forEach((c) => {
       c.invoke.apply(this, [event, ...args])
     })

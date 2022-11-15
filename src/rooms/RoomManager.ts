@@ -1,4 +1,4 @@
-import { WebSocketUser } from '../../type.d.ts'
+import { WebSocketUser } from '../type.d.ts'
 import { Room } from './Room.ts'
 
 /**

@@ -1,5 +1,5 @@
 import { EventEmitter } from 'https://deno.land/std@0.148.0/node/events.ts?s=EventEmitter'
-import { WebsocketClientConfig } from '../type.d.ts'
+import { WebsocketClientConfig } from './type.d.ts'
 
 /**
  * Client class to communicate with easy-com server
