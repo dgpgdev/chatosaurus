@@ -1,5 +1,5 @@
-import { WebSocketUser } from '../type.d.ts'
-import { Room } from './Room.ts'
+import { WebSocketUser } from "../type.d.ts"
+import { Room } from "./Room.ts"
 
 /**
  * Class to manage rooms list
@@ -18,7 +18,7 @@ export class RoomManager {
    * Get all rooms
    * @return {array} The room list
    */
-  get rooms() {
+  get rooms(): Room[] {
     return this.#roomList
   }
 
@@ -27,7 +27,7 @@ export class RoomManager {
    * @param {string} roomdID - the room id
    * @return {Room} the room object
    */
-  getRoom(roomId: string) {
+  getRoom(roomId: string): Room | undefined {
     return this.#roomList.find((room) => room.id === roomId)
   }
 
@@ -38,7 +38,7 @@ export class RoomManager {
    * @param keepAlive defined if room keep alive
    * @returns
    */
-  create(roomId: string, keepAlive = false) {
+  create(roomId: string, keepAlive = false): Room {
     let r = this.getRoom(roomId)
     if (r === undefined) {
       r = new Room(roomId, keepAlive)

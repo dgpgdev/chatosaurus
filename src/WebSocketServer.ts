@@ -3,6 +3,7 @@ import { EventEmitter } from "./tools/EventDispatcher.ts"
 import { RoomManager } from "./rooms/RoomManager.ts"
 import { WebsocketServerConfig, Middleware, WebSocketUser } from "./type.d.ts"
 import MiddleWareManager from "./middleware/MiddleWareManager.ts"
+import { Room } from "../mod.ts"
 
 interface WebSocketEmitter {
   event(
@@ -68,7 +69,7 @@ export class WebSocketServer extends EventEmitter implements WebSocketEmitter {
    * @param req
    * @returns
    */
-  reqHandler(req: Request) {
+  reqHandler(req: Request): Response {
     if (req.headers.get("upgrade") != "websocket") {
       return new Response(null, { status: 501 })
     }
@@ -87,7 +88,7 @@ export class WebSocketServer extends EventEmitter implements WebSocketEmitter {
    * Add middleware to middlewareManager
    * @param {Object} middleware middleware function
    */
-  use(middleware: Middleware<unknown>) {
+  use(middleware: Middleware<unknown>): WebSocketServer {
     this.#middlewareManager.use(middleware)
     return this
   }
@@ -217,7 +218,7 @@ export class WebSocketServer extends EventEmitter implements WebSocketEmitter {
    * Get all clients connected to server
    * @return {array} array list of socket
    */
-  get clients() {
+  get clients(): WebSocketUser[] {
     return this.#clientList
   }
 
@@ -225,7 +226,7 @@ export class WebSocketServer extends EventEmitter implements WebSocketEmitter {
    * Get all rooms
    * @return {array} room list
    */
-  get rooms() {
+  get rooms(): Room[] {
     return this.#roomManager.rooms
   }
 
@@ -234,7 +235,7 @@ export class WebSocketServer extends EventEmitter implements WebSocketEmitter {
    * @method roomManager
    * @return {RoomManager} the room manager
    */
-  get roomManager() {
+  get roomManager(): RoomManager {
     return this.#roomManager
   }
 
@@ -242,11 +243,11 @@ export class WebSocketServer extends EventEmitter implements WebSocketEmitter {
    * Define host and port for connection
    * @returns {Object} Configuration Object
    */
-  get config() {
+  get config(): WebsocketServerConfig {
     return this.#config
   }
 
-  set config(config) {
+  set config(config: WebsocketServerConfig) {
     if (config) {
       this.#config = config
     }

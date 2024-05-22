@@ -1,4 +1,4 @@
-import { WebSocketUser } from '../type.d.ts'
+import { WebSocketUser } from "../type.d.ts"
 
 /**
  * Class to represent room
@@ -13,7 +13,7 @@ export class Room {
    * @param {string} id - The id value
    * @param {boolean} keepAlive - flag to keep alive room when no user inside
    */
-  constructor(id = '', keepAlive = false) {
+  constructor(id = "", keepAlive = false) {
     this.id = id
     this.keepAlive = keepAlive
     this.#clientList = []
@@ -25,7 +25,7 @@ export class Room {
    */
   join(socket: WebSocketUser) {
     if (this.#clientList.find((client) => client.id === socket.id)) return
-    this.invoke('join', { roomId: this.id, userId: socket.id })
+    this.invoke("join", { roomId: this.id, userId: socket.id })
     this.#clientList.push(socket)
   }
 
@@ -37,7 +37,7 @@ export class Room {
     this.#clientList = this.#clientList.filter((u) => {
       return u.id != socket.id
     })
-    this.invoke('leave', { roomId: this.id, userId: socket.id })
+    this.invoke("leave", { roomId: this.id, userId: socket.id })
   }
 
   /**
@@ -55,7 +55,7 @@ export class Room {
    * Get clients list
    * @return {Array} the clients list
    */
-  get clients() {
+  get clients(): WebSocketUser[] {
     return this.#clientList
   }
 }
