@@ -1,7 +1,5 @@
 # What is Chatosaurus ?
 
-Sure, here is a package description for the Deno WebSocket server implementation:
-
 Deno WebSocket Server
 A powerful and flexible WebSocket server for Deno, designed for real-time communication between the server and multiple connected clients. This package supports room management, middleware integration, and custom event handling, making it ideal for building scalable real-time applications such as chat applications, multiplayer games, or collaborative tools.
 
