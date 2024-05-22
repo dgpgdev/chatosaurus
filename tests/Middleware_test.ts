@@ -1,6 +1,5 @@
-import { assertEquals } from "https://deno.land/std@0.158.0/testing/asserts.ts"
-
-import { Context, WebSocketUser, Next } from "../mod.ts"
+import { assertEquals } from "@std/asserts"
+import { Context, Next, WebSocketUser } from "../mod.ts"
 import MiddleWareManager from "../src/middleware/MiddleWareManager.ts"
 
 Deno.test(`Test Middleware`, () => {
@@ -10,7 +9,7 @@ Deno.test(`Test Middleware`, () => {
     ws: { id: "4444" } as WebSocketUser,
     data: [0],
   }
-  mdwm.use((ctx, next) => {
+  mdwm.use((ctx, next: Next) => {
     ;(ctx.data[0] as number) += 1
     next()
   })

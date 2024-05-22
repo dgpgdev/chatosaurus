@@ -1,5 +1,5 @@
-import { EventEmitter } from 'https://deno.land/std@0.148.0/node/events.ts?s=EventEmitter'
-import { WebsocketClientConfig } from './type.d.ts'
+import { EventEmitter } from "./tools/EventDispatcher.ts"
+import { WebsocketClientConfig } from "./type.d.ts"
 
 /**
  * Client class to communicate with easy-com server
@@ -17,7 +17,7 @@ export class WebSocketClient extends EventEmitter {
    * @type {String}
    */
   constructor(
-    uri = '',
+    uri = "",
     options: WebsocketClientConfig = { reconnect: false, delay: 0, attempt: 0 }
   ) {
     super()
@@ -58,7 +58,7 @@ export class WebSocketClient extends EventEmitter {
     this.#ws.onopen = (evt) => {
       clearInterval(this.#interval)
       this.#currentAttempt = 0
-      this.emit('open', evt)
+      this.emit("open", evt)
     }
 
     /**
@@ -68,7 +68,7 @@ export class WebSocketClient extends EventEmitter {
      * @return {[type]}     [description]
      */
     this.#ws.onerror = (evt) => {
-      this.emit('error', evt)
+      this.emit("error", evt)
     }
 
     /**
@@ -78,7 +78,7 @@ export class WebSocketClient extends EventEmitter {
      * @return {[type]}     [description]
      */
     this.#ws.onclose = (evt) => {
-      this.emit('close', evt)
+      this.emit("close", evt)
       if (this.#reconnect) {
         this.#interval = setTimeout(
           this.reconnect.bind(this),
@@ -86,7 +86,7 @@ export class WebSocketClient extends EventEmitter {
           this
         )
       } else {
-        this.emit('disconnect', evt)
+        this.emit("disconnect", evt)
       }
     }
   }
@@ -99,13 +99,13 @@ export class WebSocketClient extends EventEmitter {
     if (this.#ws.readyState === 3) {
       if (this.#currentAttempt === this.#attempt && this.#attempt != 0) {
         clearInterval(this.#interval)
-        this.emit('max_attempt', {
+        this.emit("max_attempt", {
           attempt: this.#currentAttempt,
           max_attempt: this.#attempt,
         })
       } else {
         this.#currentAttempt += 1
-        this.emit('attempt', {
+        this.emit("attempt", {
           attempt: this.#currentAttempt,
           max_attempt: this.#attempt,
         })

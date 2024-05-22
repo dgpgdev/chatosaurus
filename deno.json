@@ -4,5 +4,10 @@
   "exports": "./mod.ts",
   "tasks": {
     "dev": "deno run --watch mod.ts"
+  },
+  "imports": {
+    "@std/asserts": "jsr:@std/assert@^0.225.2",
+    "@std/http": "jsr:@std/http@^0.224.0",
+    "@std/node": "jsr:@std/node@0.148.0"
   }
 }

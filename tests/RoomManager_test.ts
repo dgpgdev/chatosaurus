@@ -1,9 +1,5 @@
-import {
-  assertEquals,
-  assertExists,
-  assertInstanceOf,
-} from 'https://deno.land/std@0.158.0/testing/asserts.ts'
-import { Room, RoomManager } from '../mod.ts'
+import { assertEquals, assertExists, assertInstanceOf } from "@std/asserts"
+import { Room, RoomManager } from "../mod.ts"
 
 Deno.test(`Room Manager no room at start`, () => {
   const rm = new RoomManager()
@@ -12,7 +8,7 @@ Deno.test(`Room Manager no room at start`, () => {
 Deno.test(`Room Manager Create Room`, () => {
   const rm = new RoomManager()
   assertEquals(rm.rooms.length, 0)
-  rm.create('my room')
+  rm.create("my room")
   assertEquals(rm.rooms.length, 1)
 })
 

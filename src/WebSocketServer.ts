@@ -1,8 +1,8 @@
-import { Server } from 'https://deno.land/std@0.137.0/http/server.ts'
-import { EventEmitter } from 'https://deno.land/std@0.148.0/node/events.ts?s=EventEmitter'
-import { RoomManager } from './rooms/RoomManager.ts'
-import { WebsocketServerConfig, Middleware, WebSocketUser } from './type.d.ts'
-import MiddleWareManager from './middleware/MiddleWareManager.ts'
+import { Server } from "@std/http/server"
+import { EventEmitter } from "./tools/EventDispatcher.ts"
+import { RoomManager } from "./rooms/RoomManager.ts"
+import { WebsocketServerConfig, Middleware, WebSocketUser } from "./type.d.ts"
+import MiddleWareManager from "./middleware/MiddleWareManager.ts"
 
 interface WebSocketEmitter {
   event(
@@ -30,7 +30,7 @@ export class WebSocketServer extends EventEmitter implements WebSocketEmitter {
    * @param config Object de configuration
    */
   constructor(
-    config: WebsocketServerConfig = { hostname: 'localhost', port: 8000 }
+    config: WebsocketServerConfig = { hostname: "localhost", port: 8000 }
   ) {
     super()
     this.#ws = new Server({ handler: this.reqHandler.bind(this) })
@@ -50,7 +50,7 @@ export class WebSocketServer extends EventEmitter implements WebSocketEmitter {
   start(): Deno.Listener | Deno.TlsListener {
     if (this.#config.secure) {
       if (!this.#config.certFile || !this.#config.keyFile) {
-        throw new Error('certfile or keyFile are not defined')
+        throw new Error("certfile or keyFile are not defined")
       }
       this.#listener = Deno.listenTls({
         hostname: this.#config.hostname,
@@ -69,7 +69,7 @@ export class WebSocketServer extends EventEmitter implements WebSocketEmitter {
    * @returns
    */
   reqHandler(req: Request) {
-    if (req.headers.get('upgrade') != 'websocket') {
+    if (req.headers.get("upgrade") != "websocket") {
       return new Response(null, { status: 501 })
     }
     const upgraded = Deno.upgradeWebSocket(req)
@@ -158,7 +158,7 @@ export class WebSocketServer extends EventEmitter implements WebSocketEmitter {
     this.#clientList.push(client)
 
     // dispatch event
-    this.emit('onConnect', client, headers)
+    this.emit("onConnect", client, headers)
   }
 
   /**
