@@ -1,7 +1,23 @@
 # What is Chatosaurus ?
 
-Chatosaurus is a simple implementation of websocket for Deno to create simple chat system.
-More easy to use, room system and middleware are natively.
+Sure, here is a package description for the Deno WebSocket server implementation:
+
+Deno WebSocket Server
+A powerful and flexible WebSocket server for Deno, designed for real-time communication between the server and multiple connected clients. This package supports room management, middleware integration, and custom event handling, making it ideal for building scalable real-time applications such as chat applications, multiplayer games, or collaborative tools.
+
+Features
+
+- Real-time Communication: Establish and manage WebSocket connections for real-time communication.
+- Room Management: Organize clients into rooms for targeted message broadcasting and efficient communication.
+- Middleware Support: Use middleware functions to process and handle messages before they reach the main event handlers.
+- Event Handling: Emit and listen to custom events to extend the functionality of your WebSocket server.
+- Secure Connections: Optionally enable TLS for secure WebSocket connections.
+
+## Installation
+
+```sh
+deno add @std/http
+```
 
 ## How to use
 
