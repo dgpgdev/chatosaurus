@@ -1,6 +1,10 @@
-import { WebSocketServer, WebSocketUser } from "./mod.ts"
-import { Context, Next } from "./src/type.d.ts"
-import { Sleep } from "./src/tools/Sleep.ts"
+import {
+  WebSocketServer,
+  type WebSocketUser,
+  type Context,
+  type Next,
+} from "@dgpg/chatosaurus"
+import { Sleep } from "../src/tools/Sleep.ts"
 
 const connectInfo = { hostname: "localhost", port: 4000 }
 
@@ -52,7 +56,6 @@ server.event("test", (user: WebSocketUser, data: string) => {
 })
 
 server.start()
-
 setInterval(
   () => server.broadcast("broadcastedEvent", Math.floor(Math.random() * 10000)),
   30000

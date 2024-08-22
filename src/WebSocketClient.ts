@@ -1,8 +1,8 @@
 import { EventEmitter } from "./tools/EventDispatcher.ts"
-import { WebsocketClientConfig } from "./type.d.ts"
+import type { WebsocketClientConfig } from "@dgpg/chatosaurus"
 
 /**
- * Client class to communicate with easy-com server
+ * Client class to communicate with chatosaurus server
  */
 export class WebSocketClient extends EventEmitter {
   #uri: string

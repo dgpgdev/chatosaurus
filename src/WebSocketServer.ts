@@ -5,11 +5,27 @@ import { WebsocketServerConfig, Middleware, WebSocketUser } from "./type.d.ts"
 import MiddleWareManager from "./middleware/MiddleWareManager.ts"
 import { Room } from "../mod.ts"
 
+/**
+ * Interface for WebSocketEmitter.
+ * @interface
+ */
 interface WebSocketEmitter {
+  /**
+   * Add an event listener to the WebSocket server.
+   * @param {string | symbol} eventName - The name of the event.
+   * @param {Function} listener - The event listener function.
+   * @returns {WebSocketServer} - The WebSocket server instance.
+   */
   event(
     eventName: string | symbol,
     listener: (context: WebSocketUser) => void
   ): WebSocketServer
+  /**
+   * Add an event listener to the WebSocket server with additional arguments.
+   * @param {string | symbol} eventName - The name of the event.
+   * @param {Function} listener - The event listener function.
+   * @returns {WebSocketServer} - The WebSocket server instance.
+   */
   event(
     eventName: string | symbol,
     listener: (context: WebSocketUser, ...args: any[]) => void
@@ -17,7 +33,9 @@ interface WebSocketEmitter {
 }
 
 /**
- * Class permettant la création d'un server websocket
+ * Class for creating a WebSocket server.
+ * @extends EventEmitter
+ * @implements WebSocketEmitter
  */
 export class WebSocketServer extends EventEmitter implements WebSocketEmitter {
   #config: WebsocketServerConfig
@@ -27,8 +45,8 @@ export class WebSocketServer extends EventEmitter implements WebSocketEmitter {
   #ws: Server
   #listener: Deno.Listener
   /**
-   * Constructeur
-   * @param config Object de configuration
+   * Create a new WebSocket server instance.
+   * @param {WebsocketServerConfig} [config={ hostname: "localhost", port: 8000 }] - The server configuration.
    */
   constructor(
     config: WebsocketServerConfig = { hostname: "localhost", port: 8000 }
@@ -46,7 +64,8 @@ export class WebSocketServer extends EventEmitter implements WebSocketEmitter {
   }
 
   /**
-   * Lance le server
+   * Start the WebSocket server.
+   * @returns {Deno.Listener | Deno.TlsListener} - The listener instance.
    */
   start(): Deno.Listener | Deno.TlsListener {
     if (this.#config.secure) {
@@ -65,9 +84,9 @@ export class WebSocketServer extends EventEmitter implements WebSocketEmitter {
   }
 
   /**
-   *
-   * @param req
-   * @returns
+   * Handle incoming requests and upgrade them to WebSocket connections.
+   * @param {Request} req - The incoming request.
+   * @returns {Response} - The upgraded response.
    */
   reqHandler(req: Request): Response {
     if (req.headers.get("upgrade") != "websocket") {
@@ -85,8 +104,9 @@ export class WebSocketServer extends EventEmitter implements WebSocketEmitter {
   }
 
   /**
-   * Add middleware to middlewareManager
-   * @param {Object} middleware middleware function
+   * Add middleware to the middleware manager.
+   * @param {Middleware<unknown>} middleware - The middleware function.
+   * @returns {WebSocketServer} - The WebSocket server instance.
    */
   use(middleware: Middleware<unknown>): WebSocketServer {
     this.#middlewareManager.use(middleware)
@@ -94,9 +114,9 @@ export class WebSocketServer extends EventEmitter implements WebSocketEmitter {
   }
 
   /**
-   *
-   * @param client
-   * @param headers
+   * Handle a new WebSocket connection.
+   * @param {WebSocketUser} client - The WebSocket client.
+   * @param {Headers} headers - The request headers.
    */
   connected(client: WebSocketUser, headers: Headers) {
     //define rooms property for socket
@@ -163,9 +183,9 @@ export class WebSocketServer extends EventEmitter implements WebSocketEmitter {
   }
 
   /**
-   *
-   * @param client Websocketuser
-   * @param data
+   * Handle a message received from a WebSocket connection.
+   * @param {WebSocketUser} client - The WebSocket client.
+   * @param {string} data - The message data.
    */
   private async message(client: WebSocketUser, data: string) {
     const parsedData = JSON.parse(data)
@@ -179,16 +199,16 @@ export class WebSocketServer extends EventEmitter implements WebSocketEmitter {
   }
 
   /**
-   *
-   * @param e
+   * Handle an error that occurs during WebSocket communication.
+   * @param {Event | ErrorEvent} e - The error event.
    */
   private handleError(e: Event | ErrorEvent) {
     console.log(e instanceof ErrorEvent ? e.message : e.type)
   }
 
   /**
-   *
-   * @param client
+   * Handle a WebSocket connection being closed.
+   * @param {WebSocketUser} client - The WebSocket client.
    */
   private disconnected(client: WebSocketUser) {
     const userIndex = this.#clientList.findIndex((c) => client.id === c.id)
@@ -200,64 +220,79 @@ export class WebSocketServer extends EventEmitter implements WebSocketEmitter {
   }
 
   /**
-   *
-   * @param msg
+   * Log an error message.
+   * @param {string} msg - The error message.
    */
   private logError(msg: string) {
     console.log(msg)
   }
 
   /**
-   * Arrete le server
+   * Stop the WebSocket server.
    */
   stop() {
     this.#listener.close()
   }
 
   /**
-   * Get all clients connected to server
-   * @return {array} array list of socket
+   * Get the list of connected clients.
+   * @returns {WebSocketUser[]} - The list of connected clients.
    */
   get clients(): WebSocketUser[] {
     return this.#clientList
   }
 
   /**
-   * Get all rooms
-   * @return {array} room list
+   * Get the list of rooms.
+   * @returns {Room[]} - The list of rooms.
    */
   get rooms(): Room[] {
     return this.#roomManager.rooms
   }
 
   /**
-   * Get the room manager
-   * @method roomManager
-   * @return {RoomManager} the room manager
+   * Get the room manager.
+   * @returns {RoomManager} - The room manager.
    */
   get roomManager(): RoomManager {
     return this.#roomManager
   }
 
   /**
-   * Define host and port for connection
-   * @returns {Object} Configuration Object
+   * Get the server configuration.
+   * @returns {WebsocketServerConfig} - The server configuration.
    */
   get config(): WebsocketServerConfig {
     return this.#config
   }
 
+  /**
+   * Set the server configuration.
+   * @param {WebsocketServerConfig} config - The server configuration.
+   */
   set config(config: WebsocketServerConfig) {
     if (config) {
       this.#config = config
     }
   }
 
+  /**
+   * Broadcast a message to all connected clients.
+   * @param {string} event - The event name.
+   * @param {any[]} args - The event arguments.
+   */
   broadcast(event: string, ...args: any[]) {
     this.#clientList.forEach((c) => {
       c.invoke.apply(this, [event, ...args])
     })
   }
+
+  /**
+   * Add an event listener to the WebSocket server.
+   * @param {string | symbol} eventName - The event name.
+   * @param {Function} listener - The event listener function.
+   * @returns {WebSocketServer} - The WebSocket server instance.
+   */
   event(
     eventName: string | symbol,
     listener: (context: WebSocketUser, ...args: any[]) => void

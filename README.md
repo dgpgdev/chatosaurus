@@ -14,7 +14,7 @@ Features
 ## Installation
 
 ```sh
-deno add @std/http
+deno add @dgpg/chatosaurus
 ```
 
 ## How to use
