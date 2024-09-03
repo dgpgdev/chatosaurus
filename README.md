@@ -1,5 +1,7 @@
 # What is Chatosaurus ?
-[![JSR](https://jsr.io/badges/@<scope>/<package>)](https://jsr.io/@dgpg/chatosaurus)
+[![JSR Scope](https://jsr.io/badges/@dgpg)](https://jsr.io/@dgpg)
+[![JSR](https://jsr.io/badges/@dgpg/chatosaurus)](https://jsr.io/@dgpg/chatosaurus) [![JSR Score](https://jsr.io/badges/@dgpg/chatosaurus/score)](https://jsr.io//@dgpg/chatosaurus)
+
 
 Deno WebSocket Server
 A powerful and flexible WebSocket server for Deno, designed for real-time communication between the server and multiple connected clients. This package supports room management, middleware integration, and custom event handling, making it ideal for building scalable real-time applications such as chat applications, multiplayer games, or collaborative tools.
